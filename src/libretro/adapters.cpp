@@ -72,15 +72,12 @@ done:
 
 
 
-bool LoadFile(std::vector<uint8_t> *data,
-              const std::string &path,
-              Messages *messages,
-              uint32_t flags)
+bool LoadFile(std::vector<uint8_t> *data, const std::string &path, const LogSet &logs, uint32_t flags)
 {
 printf ("LoadFile: %s\n",path.c_str());
 return false;
 }
-bool SaveFile(const std::vector<uint8_t> &data, const std::string &path, Messages *messages)
+bool SaveFile(const void *data, size_t data_size, const std::string &path, const LogSet &logs)
 {
 printf ("SaveFile: %s\n",path.c_str());
 return false;

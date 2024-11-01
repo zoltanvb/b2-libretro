@@ -181,6 +181,7 @@ bool prevJoystickButtons[2] = {0};
 bool prevJoypadButtons[16] = {0};
 static const char bbcMicroType[50] = {0};
 static int model_index = 0;
+static const ROMType DEFAULT_ROM_TYPES[16] = {};
 
 static void fallback_log(enum retro_log_level level, const char *fmt, ...)
 {
@@ -278,10 +279,12 @@ static void create_core(BBCMicro** newcore)
     log_cb(RETRO_LOG_DEBUG, "Creating new core, type: %s\n",machine_types[model_index].name);
 
     *newcore = new BBCMicro(
-      machine_types[model_index].type,
+      CreateBBCMicroType(machine_types[model_index].type,DEFAULT_ROM_TYPES),
       machine_types[model_index].disc_interface,
       machine_types[model_index].parasite_type,
       {},nullptr,0,nullptr,{0});
+
+
     (*newcore)->SetOSROM(          std::make_shared<std::array<unsigned char, 16384>>(*machine_types[model_index].os_standard_rom));
     for (int k=15;k>=0;k--)
     {
@@ -290,7 +293,8 @@ static void create_core(BBCMicro** newcore)
            // writeable + rom is theoretically a valid combination, but none of the fixed configs contain it
            (*newcore)->SetSidewaysRAM(k, nullptr);
          } else {
-           (*newcore)->SetSidewaysROM(k, std::make_shared<std::array<unsigned char, 16384>>(*machine_types[model_index].rom_array[k]));
+           //(*newcore)->SetSidewaysROM(k, std::make_shared<std::array<unsigned char, 16384>>(*machine_types[model_index].rom_array[k]),ROMType_16KB);
+           (*newcore)->SetSidewaysROM(k, std::make_shared<std::vector<unsigned char>>(*machine_types[model_index].rom_array[k]),ROMType_16KB);
          }
       }
     }

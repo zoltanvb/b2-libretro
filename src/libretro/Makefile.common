@@ -41,7 +41,6 @@ SOURCES_CPP := \
 	$(CORE_DIR)/b2/DiscGeometry.cpp \
 	$(CORE_DIR)/b2/DirectDiscImage.cpp \
 	$(CORE_DIR)/b2/filters.cpp \
-	$(CORE_DIR)/b2/misc.cpp \
 	$(CORE_DIR)/b2/Remapper.cpp \
 
 SOURCES_C := \
@@ -53,15 +52,15 @@ ifneq (,$(findstring osx,$(platform)))
 SOURCES_CPP += \
 	$(CORE_DIR)/shared/c/system_osx.cpp \
 
-SOURCES_C += \
-	$(CORE_DIR)/shared/c/system_posix.c \
+SOURCES_CPP += \
+	$(CORE_DIR)/shared/c/system_posix.cpp \
 
 else ifneq (,$(findstring unix,$(platform)))
 SOURCES_CPP += \
 	$(CORE_DIR)/shared/c/system_linux.cpp \
 
-SOURCES_C += \
-	$(CORE_DIR)/shared/c/system_posix.c \
+SOURCES_CPP += \
+	$(CORE_DIR)/shared/c/system_posix.cpp \
 
 else ifneq (,$(findstring win,$(platform)))
 SOURCES_CPP += \
@@ -137,3 +136,4 @@ endif
 #	$(CORE_DIR)/b2/Messages.cpp \
 #	$(CORE_DIR)/b2/BeebConfig.cpp \
 #	$(CORE_DIR)/shared/c/CommandLineParser.cpp \
+#	$(CORE_DIR)/b2/misc.cpp \

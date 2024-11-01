@@ -103,8 +103,8 @@ const std::multimap<std::string, std::string> multidisk_replacements = {
 struct machine_type {
    const char * name;
    const std::array<unsigned char, 16384> * os_standard_rom;
-   const BBCMicroType * type;
-   const DiscInterfaceDef * disc_interface;
+   const BBCMicroTypeID type;
+   const DiscInterface * disc_interface;
    const std::array<unsigned char, 16384> * rom_array[16];
    bool ext_mem;
    bool beeblink;
@@ -119,8 +119,8 @@ machine_type machine_types[] = {
    {  
       "B/Acorn 1770",
       &OS12_ROM,
-      &BBC_MICRO_TYPE_B,
-      &DISC_INTERFACE_ACORN_1770,
+      BBCMicroTypeID_B,
+      DISC_INTERFACE_ACORN_1770,
       {
                 nullptr,
                 nullptr,
@@ -147,7 +147,7 @@ machine_type machine_types[] = {
       "Unknown",
       ""
    },
-   {  
+/*   {  
       "B/Watford 1770 (DDB2)",
       &OS12_ROM,
       &BBC_MICRO_TYPE_B,
@@ -363,7 +363,7 @@ machine_type machine_types[] = {
       nullptr,
       "Unknown",
       ""
-   },
+   },*/
 };
 // TODO: support the rest of the types
 /*

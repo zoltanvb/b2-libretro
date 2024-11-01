@@ -19,11 +19,8 @@ std::string strprintf(const char *fmt, ...) PRINTF_LIKE(1, 2);
 std::string strprintfv(const char *fmt, va_list v);
 //void log_info_OUTPUT(const char *fmt, ...);
 
-bool LoadFile(std::vector<uint8_t> *data,
-              const std::string &path,
-              Messages *messages,
-              uint32_t flags = 0);
-bool SaveFile(const std::vector<uint8_t> &data, const std::string &path, Messages *messages);
+bool LoadFile(std::vector<uint8_t> *data, const std::string &path, const LogSet &logs, uint32_t flags);
+bool SaveFile(const void *data, size_t data_size, const std::string &path, const LogSet &logs);
 
 class FileDialog;
 
