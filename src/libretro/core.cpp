@@ -294,7 +294,9 @@ static void create_core(BBCMicro** newcore)
            (*newcore)->SetSidewaysRAM(k, nullptr);
          } else {
            //(*newcore)->SetSidewaysROM(k, std::make_shared<std::array<unsigned char, 16384>>(*machine_types[model_index].rom_array[k]),ROMType_16KB);
-           (*newcore)->SetSidewaysROM(k, std::make_shared<std::vector<unsigned char>>(*machine_types[model_index].rom_array[k]),ROMType_16KB);
+           std::vector<unsigned char> romvec(*machine_types[model_index].rom_array[k]->begin(),*machine_types[model_index].rom_array[k]->end());
+           (*newcore)->SetSidewaysROM(k, std::make_shared<std::vector<unsigned char>>(romvec), ROMType_16KB);
+           //(*newcore)->SetSidewaysROM(k, std::make_shared<std::vector<unsigned char>>(*machine_types[model_index].rom_array[k]),ROMType_16KB);
          }
       }
     }
