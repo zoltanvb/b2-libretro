@@ -13,7 +13,12 @@ SOURCES_CPP := \
 	$(CORE_DIR)/beeb/src/adc.cpp \
 	$(CORE_DIR)/beeb/src/BBCMicro.cpp \
 	$(CORE_DIR)/beeb/src/BBCMicroParasiteType.cpp \
+	$(CORE_DIR)/beeb/src/BBCMicroState.cpp \
 	$(CORE_DIR)/beeb/src/BBCMicro_Update.cpp \
+	$(CORE_DIR)/beeb/src/BBCMicro_Update0.cpp \
+	$(CORE_DIR)/beeb/src/BBCMicro_Update1.cpp \
+	$(CORE_DIR)/beeb/src/BBCMicro_Update2.cpp \
+	$(CORE_DIR)/beeb/src/BBCMicro_Update3.cpp \
 	$(CORE_DIR)/beeb/src/BeebLink.cpp \
 	$(CORE_DIR)/beeb/src/conf.cpp \
 	$(CORE_DIR)/beeb/src/crtc.cpp \
@@ -38,6 +43,7 @@ SOURCES_CPP := \
 	$(CORE_DIR)/shared/c/log.cpp \
 	$(CORE_DIR)/shared/c/system.cpp \
 	$(CORE_DIR)/shared/c/mutex.cpp \
+	$(CORE_DIR)/shared/c/sha1.cpp \
 	$(CORE_DIR)/b2/DiscGeometry.cpp \
 	$(CORE_DIR)/b2/DirectDiscImage.cpp \
 	$(CORE_DIR)/b2/filters.cpp \

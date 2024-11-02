@@ -83,6 +83,30 @@ printf ("SaveFile: %s\n",path.c_str());
 return false;
 }
 
+
+std::string strprintf(const char *fmt, ...) {
+    va_list v;
+
+    va_start(v, fmt);
+    std::string result = strprintfv(fmt, v);
+    va_end(v);
+
+    return result;
+}
+
+std::string strprintfv(const char *fmt, va_list v) {
+    char *str;
+    if (vasprintf(&str, fmt, v) == -1) {
+        // Better suggestions welcome... please.
+        return std::string("vasprintf failed - ") + " (" + std::to_string(errno) + ")";
+    } else {
+        std::string result(str);
+        free(str);
+        str = NULL;
+        return result;
+    }
+}
+
 class FileDialog {
   public:
     void AddFilter(std::string title, const std::vector<std::string> extensions);

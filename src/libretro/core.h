@@ -114,7 +114,7 @@ struct machine_type {
    const char * nvram_type;
    const char * nvram;
 };
-#define MACHINE_TYPES_COUNT 8
+#define MACHINE_TYPES_COUNT 1
 machine_type machine_types[] = {
    {  
       "B/Acorn 1770",

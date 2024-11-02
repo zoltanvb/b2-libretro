@@ -284,7 +284,6 @@ static void create_core(BBCMicro** newcore)
       machine_types[model_index].parasite_type,
       {},nullptr,0,nullptr,{0});
 
-
     (*newcore)->SetOSROM(          std::make_shared<std::array<unsigned char, 16384>>(*machine_types[model_index].os_standard_rom));
     for (int k=15;k>=0;k--)
     {
@@ -293,10 +292,8 @@ static void create_core(BBCMicro** newcore)
            // writeable + rom is theoretically a valid combination, but none of the fixed configs contain it
            (*newcore)->SetSidewaysRAM(k, nullptr);
          } else {
-           //(*newcore)->SetSidewaysROM(k, std::make_shared<std::array<unsigned char, 16384>>(*machine_types[model_index].rom_array[k]),ROMType_16KB);
-           std::vector<unsigned char> romvec(*machine_types[model_index].rom_array[k]->begin(),*machine_types[model_index].rom_array[k]->end());
+           std::vector<unsigned char> romvec((*machine_types[model_index].rom_array[k]).begin(),(*machine_types[model_index].rom_array[k]).end());
            (*newcore)->SetSidewaysROM(k, std::make_shared<std::vector<unsigned char>>(romvec), ROMType_16KB);
-           //(*newcore)->SetSidewaysROM(k, std::make_shared<std::vector<unsigned char>>(*machine_types[model_index].rom_array[k]),ROMType_16KB);
          }
       }
     }
@@ -695,15 +692,14 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
     .max_height   = TV_TEXTURE_HEIGHT,
     .aspect_ratio = aspect,
   };
-  //printf("retro_get_system_av_info \n");
 }
 
 void retro_set_environment(retro_environment_t cb)
 {
 
-  environ_cb = cb;
-
   bool no_content = true;
+
+  environ_cb = cb;
   environ_cb(RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME, &no_content);
 
   if (environ_cb(RETRO_ENVIRONMENT_GET_LOG_INTERFACE, &logging))

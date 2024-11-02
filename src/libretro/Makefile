@@ -479,7 +479,7 @@ ifeq ($(STATIC_LINKING), 1)
     EXT := a
 endif
 
-LIBM		= -lpthread -lz
+LIBM		= -lpthread -lz 
 ifeq ($(EXCLUDE_SOUND_LIBS), 0)
   LIBM += -lsndfile
 endif
