@@ -114,7 +114,7 @@ struct machine_type {
    const char * nvram_type;
    const char * nvram;
 };
-#define MACHINE_TYPES_COUNT 1
+#define MACHINE_TYPES_COUNT 8
 machine_type machine_types[] = {
    {  
       "B/Acorn 1770",
@@ -147,11 +147,11 @@ machine_type machine_types[] = {
       "Unknown",
       ""
    },
-/*   {  
+   {  
       "B/Watford 1770 (DDB2)",
       &OS12_ROM,
-      &BBC_MICRO_TYPE_B,
-      &DISC_INTERFACE_WATFORD_DDB2,
+      BBCMicroTypeID_B,
+      MODEL_B_DISC_INTERFACES[1],
       {
                 nullptr,
                 nullptr,
@@ -181,8 +181,8 @@ machine_type machine_types[] = {
    {  
       "B/Watford 1770 (DDB3)",
       &OS12_ROM,
-      &BBC_MICRO_TYPE_B,
-      &DISC_INTERFACE_WATFORD_DDB3,
+      BBCMicroTypeID_B,
+      MODEL_B_DISC_INTERFACES[2],
       {
                 nullptr,
                 nullptr,
@@ -212,8 +212,8 @@ machine_type machine_types[] = {
    {
       "B/Opus 1770",
       &OS12_ROM,
-      &BBC_MICRO_TYPE_B,
-      &DISC_INTERFACE_OPUS,
+      BBCMicroTypeID_B,
+      MODEL_B_DISC_INTERFACES[3],
       {
                 nullptr,
                 nullptr,
@@ -243,8 +243,8 @@ machine_type machine_types[] = {
    {
       "B/Opus CHALLENGER 256K",
       &OS12_ROM,
-      &BBC_MICRO_TYPE_B,
-      &DISC_INTERFACE_CHALLENGER_256K,
+      BBCMicroTypeID_B,
+      MODEL_B_DISC_INTERFACES[4],
       {
                 nullptr,
                 nullptr,
@@ -274,8 +274,8 @@ machine_type machine_types[] = {
    {
       "B/Opus CHALLENGER 512K",
       &OS12_ROM,
-      &BBC_MICRO_TYPE_B,
-      &DISC_INTERFACE_CHALLENGER_512K,
+      BBCMicroTypeID_B,
+      MODEL_B_DISC_INTERFACES[5],
       {
                 nullptr,
                 nullptr,
@@ -305,8 +305,8 @@ machine_type machine_types[] = {
    {
       "B+",
       &BPlusMOS_ROM,
-      &BBC_MICRO_TYPE_B_PLUS,
-      &DISC_INTERFACE_ACORN_1770,
+      BBCMicroTypeID_BPlus,
+      DISC_INTERFACE_ACORN_1770,
       {
                 nullptr,
                 nullptr,
@@ -336,8 +336,8 @@ machine_type machine_types[] = {
    {
       "B+128",
       &BPlusMOS_ROM,
-      &BBC_MICRO_TYPE_B_PLUS,
-      &DISC_INTERFACE_ACORN_1770,
+      BBCMicroTypeID_BPlus,
+      DISC_INTERFACE_ACORN_1770,
       {
                 &writeable_ROM,
                 &writeable_ROM,
@@ -363,7 +363,7 @@ machine_type machine_types[] = {
       nullptr,
       "Unknown",
       ""
-   },*/
+   },
 };
 // TODO: support the rest of the types
 /*
