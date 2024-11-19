@@ -7,21 +7,28 @@ I do some of the development on macOS, so that version should work
 well.
 
 The Linux version doesn't get much testing by me, though I do try it
-on Ubuntu 18.04 occasionally. But I've had few reports of problems.
+on a Ubuntu VM occasionally. But I've had few reports of problems.
 (Please [create an issue](https://github.com/tom-seddon/b2/issues) if
 necessary.)
+
+# Common prerequisites
+
+- [cmake](https://cmake.org/) version 3.20+ on the PATH (I built it from [the CMake github repo](https://github.com/Kitware/CMake))
+- [ninja](https://ninja-build.org/) (build from the [Ninja github repo](https://github.com/ninja-build/ninja), install from MacPorts, etc.)
+- Python 3.x
 
 # macOS prerequisites
 
 - Xcode
 
-There are additional dependencies for video writing, which are
-optional. The project will build without these, but video writing
+## Additional prerequisites for video writing
+
+These are optional. b2 will build without them, but video writing
 won't be available.
 
-- FFmpeg libs (I used `ffmpeg @4.2.1_2+gpl2` from MacPorts)
+- FFmpeg libs (should work with FFmpeg 4 or above)
 
-Video writing on macOS is experimental.
+Yuu can get these from MacPorts or Homebrew.
 
 # Linux prerequisites
 
@@ -39,26 +46,17 @@ ticked.
 	
 ## Additional prerequisites for video writing
 	
-There are additional dependencies for video writing, which are
-optional. The project will build without these, but video writing
+These are optional. b2 will build without them, but video writing
 won't be available.
 
 - `libx264-dev` apt package
 - `FFmpeg` libs: libavcodec 58+, libavformat 58+, libavutil 56+,
-  libswresample 3+, libswscale 5+ - not sure about the version
-  numbering here, but this seems to correspond to FFmpeg 4.1.
+  libswresample 3+, libswscale 5+ (this corresponds to FFmpeg 4 or
+  later)
   
-Watch out for older package manager versions of FFmpeg! It's easy to
-build from [the FFmpeg github repo](https://github.com/FFmpeg/FFmpeg),
-though. (I used configure options `--enable-libx264 --enable-gpl
---enable-shared`. I had to re-run `ldconfig` after doing `make
-install` so the system could find the new libraries.)
-
-# Common prerequisites
-
-- [cmake](https://cmake.org/) version 3.20+ on the PATH (I built it from [the CMake github repo](https://github.com/Kitware/CMake))
-- [ninja](https://ninja-build.org/) (build from the [Ninja github repo](https://github.com/ninja-build/ninja), install from MacPorts, etc.)
-- Python 3.x
+FFmpeg is easy enough to build from the [the FFmpeg github
+repo](https://github.com/FFmpeg/FFmpeg) if the package manager version
+doesn't suit.
 
 # Building
 
@@ -83,7 +81,10 @@ Day-to-day build steps:
    
 2. Run `ninja` to build. If building with gcc, note that it is normal
    for this to take longer than you might like. Build times with clang
-   are a bit better
+   are a bit better. It may use a lot of RAM in either case
+   
+   (`ninja -j 1` will run max 1 job at once, possibly worth trying on
+   Linux if the build awakens the OOM killer)
 
 3. Run `ninja test` to run the automated tests (this might take a few
    minutes - they should all pass)
