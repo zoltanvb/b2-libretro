@@ -1,21 +1,13 @@
 #include <shared/system.h>
-#include <shared/path.h>
 #include <string>
-#include "misc.h"
-#include "DirectDiscImage.h"
-#include "native_ui.h"
-#include "Messages.h"
+#include <beeb/DirectDiscImage.h>
 #include <limits.h>
-#ifndef B2_LIBRETRO_CORE
-#include "load_save.h"
-#else
-#include "../libretro/adapters.h"
-#endif // B2_LIBRETRO_CORE
+#include <shared/file_io.h>
+#include <shared/path.h>
+#include <shared/log.h>
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-
-LOG_EXTERN(OUTPUT);
 
 const std::string DirectDiscImage::LOAD_METHOD_DIRECT = "direct";
 
@@ -30,16 +22,16 @@ DirectDiscImage::~DirectDiscImage() {
 //////////////////////////////////////////////////////////////////////////
 
 std::shared_ptr<DirectDiscImage> DirectDiscImage::CreateForFile(std::string path,
-                                                                Messages *msg) {
-    size_t size;
+                                                                const LogSet &logs) {
+    uint64_t size;
     bool can_write;
-    if (!GetFileDetails(&size, &can_write, path.c_str())) {
-        msg->e.f("Couldn't get details for file: %s\n", path.c_str());
+    if (!PathIsFileOnDisk(path, &size, &can_write)) {
+        logs.e.f("Couldn't get details for file: %s\n", path.c_str());
         return nullptr;
     }
 
     DiscGeometry geometry;
-    if (!FindDiscGeometryFromFileDetails(&geometry, path.c_str(), size, msg)) {
+    if (!FindDiscGeometryFromFileDetails(&geometry, path.c_str(), size, &logs)) {
         return nullptr;
     }
 
@@ -93,22 +85,26 @@ std::string DirectDiscImage::GetLoadMethod() const {
 
 // TODO - basically the same as MemoryDiscImage.
 std::string DirectDiscImage::GetDescription() const {
-    return strprintf("%s %s %zuT x %zuS",
-                     m_geometry.double_sided ? "DS" : "SS",
-                     m_geometry.double_density ? "DD" : "SD",
-                     m_geometry.num_tracks,
-                     m_geometry.sectors_per_track);
+    char description[100];
+    snprintf(description, sizeof description, "%s %s %zuT x %zuS",
+             m_geometry.double_sided ? "DS" : "SS",
+             m_geometry.double_density ? "DD" : "SD",
+             m_geometry.num_tracks,
+             m_geometry.sectors_per_track);
+
+    return description;
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
 // TODO - basically the same as MemoryDiscImage.
-void DirectDiscImage::AddFileDialogFilter(FileDialog *fd) const {
+std::vector<FileDialogFilter> DirectDiscImage::GetFileDialogFilters() const {
     if (const char *ext = GetExtensionFromDiscGeometry(m_geometry)) {
-        std::string pattern = std::string("*") + ext;
-        fd->AddFilter("BBC disc image", {pattern});
+        return {{"BBC disc image", {ext}}};
     }
+
+    return {};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -118,11 +114,11 @@ bool DirectDiscImage::SaveToFile(const std::string &file_name, const LogSet &log
     this->Close();
 
     std::vector<uint8_t> data;
-    if (!LoadFile(&data, m_path, logs)) {
+    if (!LoadFile(&data, m_path, &logs)) {
         return false;
     }
 
-    if (!SaveFile(data, file_name, logs)) {
+    if (!SaveFile(data, file_name, &logs)) {
         return false;
     }
 
@@ -252,8 +248,6 @@ bool DirectDiscImage::fopenAndSeek(bool write,
             mode = "rb";
         }
 
-        LOGF(OUTPUT, "Opening: %s (mode=%s)\n", m_path.c_str(), mode);
-
         m_fp = fopenUTF8(m_path.c_str(), mode);
         if (!m_fp) {
             return false;
@@ -275,7 +269,6 @@ bool DirectDiscImage::fopenAndSeek(bool write,
 
 void DirectDiscImage::Close() const {
     if (m_fp) {
-        LOGF(OUTPUT, "Closing: %s\n", m_path.c_str());
         fclose(m_fp);
         m_fp = nullptr;
     }

@@ -33,6 +33,9 @@ set(SRCS
   ${S}/PCD8572.cpp ${I}/PCD8572.h ${I}/PCD8572.inl
   ${S}/uef.cpp ${I}/uef.h
   ${S}/BBCMicroState.cpp ${I}/BBCMicroState.h ${I}/BBCMicroState.inl
+  ${S}/DiscGeometry.cpp ${I}/DiscGeometry.h
+  ${S}/DirectDiscImage.cpp ${I}/DirectDiscImage.h
+  ${S}/MemoryDiscImage.cpp ${I}/MemoryDiscImage.h
 )
 
 if(MSVC)
