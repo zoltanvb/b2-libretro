@@ -115,3 +115,11 @@ void FileDialog::AddFilter(std::string title, std::vector<std::string> patterns)
     (void)title;
     (void)patterns;
 }
+
+LibretroMessages::LibretroMessages() 
+: LogSet{m_info, m_warning, m_error}
+    , m_info("", &log_printer_nowhere, false)
+    , m_warning("", &log_printer_nowhere, false)
+    , m_error("", &log_printer_nowhere, false)
+{
+}

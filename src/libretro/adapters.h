@@ -4,6 +4,8 @@
 #include <string>
 #include <stdint.h>
 #include "../b2/Messages.h"
+#include "../shared/h/shared/file_io.h"
+#include "../shared/h/shared/log.h"
 
 #ifdef _WIN32
 const char PATH_SEPARATOR = '\\';
@@ -23,5 +25,18 @@ bool LoadFile(std::vector<uint8_t> *data, const std::string &path, const LogSet 
 bool SaveFile(const std::vector<uint8_t> &data, const std::string &path, const LogSet &logs);
 
 class FileDialog;
+
+class LibretroMessages : public LogSet {
+  public:
+    // When default-constructed, all three logs are disabled and go to
+    // the nowhere printer.
+    LibretroMessages();
+
+
+  protected:
+  private:
+    Log m_info, m_warning, m_error;
+
+};
 
 #endif

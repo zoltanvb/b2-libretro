@@ -95,7 +95,7 @@ other QoL
 #include "../beeb/include/beeb/video.h"
 #include "../beeb/include/beeb/TVOutput.h"
 #include "../beeb/include/beeb/OutputData.h"
-#include "../b2/DirectDiscImage.h"
+#include "../beeb/include/beeb/DirectDiscImage.h"
 #include "../b2/filters.h"
 #include "../shared/h/shared/path.h"
 #include "roms.hpp"
@@ -182,6 +182,8 @@ bool prevJoypadButtons[16] = {0};
 static const char bbcMicroType[50] = {0};
 static int model_index = 0;
 static const ROMType DEFAULT_ROM_TYPES[16] = {};
+
+LibretroMessages logObject;
 
 static void fallback_log(enum retro_log_level level, const char *fmt, ...)
 {
@@ -389,7 +391,7 @@ static bool set_image_index_cb(unsigned index) {
   } else {
     diskIndex = index;
     if (core) {
-      core->SetDiscImage(0, DirectDiscImage::CreateForFile(diskPaths[diskIndex], nullptr));
+      core->SetDiscImage(0, DirectDiscImage::CreateForFile(diskPaths[diskIndex], logObject));
     }
   }
   return true;
@@ -1173,7 +1175,7 @@ bool retro_load_game(const struct retro_game_info *info)
     create_core(&core);
     
   std::string path = info->path;
-  core->SetDiscImage(0, DirectDiscImage::CreateForFile(path, nullptr));
+  core->SetDiscImage(0, DirectDiscImage::CreateForFile(path, logObject));
 
   // Autoboot: if there is [SOMETHING] notice in the filename, use it
   // otherwise press Shift and hope for autoboot
