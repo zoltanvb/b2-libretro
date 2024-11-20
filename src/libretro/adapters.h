@@ -26,12 +26,20 @@ bool SaveFile(const std::vector<uint8_t> &data, const std::string &path, const L
 
 class FileDialog;
 
+class LogPrinterLibretro : public LogPrinter {
+  public:
+    void Print(const char *str, size_t str_len) override;
+    LogPrinterLibretro(bool dummy);
+  
+  protected:
+  private:
+};
+
+extern LogPrinterLibretro lplibretro;
+
 class LibretroMessages : public LogSet {
   public:
-    // When default-constructed, all three logs are disabled and go to
-    // the nowhere printer.
     LibretroMessages();
-
 
   protected:
   private:
