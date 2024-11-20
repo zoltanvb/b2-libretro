@@ -6,10 +6,10 @@
 //
 // Write-through disc image.
 //
-// Does an fopen, fseek, fgetc/fputc, fclose for every byte. Needs more
-// support from the disc system for better performance - should ideally
-// open the file when the motor spins up, and close it when it spins down.
-// It's then pretty obvious when the file is safe to overwrite.
+// Opens disk image file as required, then closes on motor spin down. This
+// strikes a decent balance between performance (fopen per byte is pretty
+// terrible on Windows...) and making it easy to rewrite a DFS disk image that's
+// in use (file can be overwritten when motor is off).
 //
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ class DirectDiscImage : public DiscImage {
 
     ~DirectDiscImage();
 
-    static std::shared_ptr<DirectDiscImage> CreateForFile(std::string path, Messages *msg);
+    static std::shared_ptr<DirectDiscImage> CreateForFile(std::string path, const LogSet &logs);
 
     DirectDiscImage(const DirectDiscImage &) = delete;
     DirectDiscImage &operator=(const DirectDiscImage &) = delete;
@@ -44,7 +44,7 @@ class DirectDiscImage : public DiscImage {
     std::string GetLoadMethod() const override;
     std::string GetDescription() const override;
 
-    void AddFileDialogFilter(FileDialog *fd) const override;
+    std::vector<FileDialogFilter> GetFileDialogFilters() const override;
 
     bool SaveToFile(const std::string &file_name, const LogSet &logs) const override;
 

@@ -16,14 +16,11 @@ add_executable(b2 MACOSX_BUNDLE
   ConfigsUI.cpp ConfigsUI.h ConfigsUI_private.inl
   DataRateUI.cpp DataRateUI.h
   DearImguiTestUI.cpp DearImguiTestUI.h
-  DirectDiscImage.cpp DirectDiscImage.h
-  DiscGeometry.cpp DiscGeometry.h
   GenerateThumbnailJob.cpp GenerateThumbnailJob.h
   HTTPMethodsHandler.cpp HTTPMethodsHandler.h
   HTTPServer.cpp HTTPServer.h
   JobQueue.cpp JobQueue.h
   KeymapsUI.cpp KeymapsUI.h
-  MemoryDiscImage.cpp MemoryDiscImage.h
   MessageQueue.cpp MessageQueue.h
   Messages.cpp Messages.h
   MessagesUI.cpp MessagesUI.h
@@ -46,12 +43,13 @@ add_executable(b2 MACOSX_BUNDLE
   filters.cpp filters.h
   keymap.cpp keymap.h
   keys.cpp keys.h keys.inl
-  load_save.cpp load_save.h load_save.inl
+  load_save.cpp load_save.h
   misc.cpp misc.h misc.inl
   native_ui.cpp native_ui.h
   roms.cpp roms.h
   profiler.cpp profiler.h
   joysticks.cpp joysticks.h
+  LoadMemoryDiscImage.cpp LoadMemoryDiscImage.h
   )
 
 if(OSX)
@@ -248,7 +246,6 @@ endif()
 if(FFMPEG_FOUND)
   target_sources(b2 PRIVATE VideoWriterFFmpeg.cpp VideoWriterFFmpeg.h)
   target_link_libraries(b2 PRIVATE ${FFMPEG_LINK_LIBRARIES})
-  # target_link_directories(b2 PRIVATE ${FFMPEG_LIBRARY_DIRS})
   target_include_directories(b2 PRIVATE ${FFMPEG_INCLUDE_DIRS})
   target_compile_definitions(b2 PRIVATE ${FFMPEG_DEFINITIONS} -DHAVE_FFMPEG=1)
 endif()

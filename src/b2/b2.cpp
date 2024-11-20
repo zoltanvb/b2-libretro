@@ -13,7 +13,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "MemoryDiscImage.h"
+#include "LoadMemoryDiscImage.h"
+#include <beeb/MemoryDiscImage.h>
 #include <inttypes.h>
 #include "VBlankMonitor.h"
 #include <Remotery.h>
@@ -37,7 +38,7 @@
 #include "HTTPServer.h"
 #include "HTTPMethodsHandler.h"
 #include <curl/curl.h>
-#include "DirectDiscImage.h"
+#include <beeb/DirectDiscImage.h>
 #include "discs.h"
 #if SYSTEM_OSX
 #include <IOKit/hid/IOHIDLib.h>
@@ -336,6 +337,7 @@ void *b2VBlankHandler::AllocateDisplayData(uint32_t display_id) {
 //////////////////////////////////////////////////////////////////////////
 
 void b2VBlankHandler::FreeDisplayData(uint32_t display_id, void *data) {
+    (void)data;
     (void)display_id;
 
     LockGuard<Mutex> lock(m_mutex);
@@ -699,7 +701,7 @@ static bool ParseCommandLineOptions(
 
     // Detect the File Explorer double-click case on Windows (also acts as a
     // convenient command-line shortcut).
-    if (argc == 2 && PathIsFileOnDisk(argv[1])) {
+    if (argc == 2 && PathIsFileOnDisk(argv[1], nullptr, nullptr)) {
         options->file_association_mode = true;
         options->file_association_path = argv[1];
 
@@ -979,6 +981,17 @@ static void LoadDiscDriveSound(bool *good, DiscDriveType type, DiscDriveSound so
 
 static bool LoadDiscDriveSamples(Messages *init_messages) {
     bool good = true;
+
+    LoadDiscDriveSound(&good, DiscDriveType_90mm, DiscDriveSound_Seek2ms, "35_seek_2ms.wav", init_messages);
+    LoadDiscDriveSound(&good, DiscDriveType_90mm, DiscDriveSound_Seek6ms, "35_seek_6ms.wav", init_messages);
+    LoadDiscDriveSound(&good, DiscDriveType_90mm, DiscDriveSound_Seek12ms, "35_seek_12ms.wav", init_messages);
+    LoadDiscDriveSound(&good, DiscDriveType_90mm, DiscDriveSound_Seek20ms, "35_seek_20ms.wav", init_messages);
+    LoadDiscDriveSound(&good, DiscDriveType_90mm, DiscDriveSound_SpinEmpty, "35_spin_empty.wav", init_messages);
+    LoadDiscDriveSound(&good, DiscDriveType_90mm, DiscDriveSound_SpinEnd, "35_spin_end.wav", init_messages);
+    LoadDiscDriveSound(&good, DiscDriveType_90mm, DiscDriveSound_SpinLoaded, "35_spin_loaded.wav", init_messages);
+    LoadDiscDriveSound(&good, DiscDriveType_90mm, DiscDriveSound_SpinStartEmpty, "35_spin_start_empty.wav", init_messages);
+    LoadDiscDriveSound(&good, DiscDriveType_90mm, DiscDriveSound_SpinStartLoaded, "35_spin_start_loaded.wav", init_messages);
+    LoadDiscDriveSound(&good, DiscDriveType_90mm, DiscDriveSound_Step, "35_step_1_1.wav", init_messages);
 
     LoadDiscDriveSound(&good, DiscDriveType_133mm, DiscDriveSound_Seek2ms, "525_seek_2ms.wav", init_messages);
     LoadDiscDriveSound(&good, DiscDriveType_133mm, DiscDriveSound_Seek6ms, "525_seek_6ms.wav", init_messages);
@@ -1373,9 +1386,9 @@ static bool main2(int argc, char *argv[], const std::shared_ptr<MessageList> &in
                 }
 
                 if (options.direct_disc[i]) {
-                    ia.init_disc_images[i] = DirectDiscImage::CreateForFile(options.discs[i], &init_messages);
+                    ia.init_disc_images[i] = DirectDiscImage::CreateForFile(options.discs[i], init_messages);
                 } else {
-                    ia.init_disc_images[i] = MemoryDiscImage::LoadFromFile(options.discs[i], &init_messages);
+                    ia.init_disc_images[i] = LoadMemoryDiscImage(options.discs[i], init_messages);
                 }
 
                 if (!ia.init_disc_images[i]) {

@@ -104,7 +104,7 @@ struct machine_type {
    const char * name;
    const std::array<unsigned char, 16384> * os_standard_rom;
    const BBCMicroTypeID type;
-   const DiscInterface * disc_interface;
+   const DiscInterface* disc_interface;
    const std::array<unsigned char, 16384> * rom_array[16];
    bool ext_mem;
    bool beeblink;
@@ -120,7 +120,7 @@ machine_type machine_types[] = {
       "B/Acorn 1770",
       &OS12_ROM,
       BBCMicroTypeID_B,
-      DISC_INTERFACE_ACORN_1770,
+      &DISC_INTERFACE_ACORN_1770,
       {
                 nullptr,
                 nullptr,
@@ -306,7 +306,7 @@ machine_type machine_types[] = {
       "B+",
       &BPlusMOS_ROM,
       BBCMicroTypeID_BPlus,
-      DISC_INTERFACE_ACORN_1770,
+      &DISC_INTERFACE_ACORN_1770,
       {
                 nullptr,
                 nullptr,
@@ -337,7 +337,7 @@ machine_type machine_types[] = {
       "B+128",
       &BPlusMOS_ROM,
       BBCMicroTypeID_BPlus,
-      DISC_INTERFACE_ACORN_1770,
+      &DISC_INTERFACE_ACORN_1770,
       {
                 &writeable_ROM,
                 &writeable_ROM,

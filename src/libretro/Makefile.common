@@ -44,8 +44,9 @@ SOURCES_CPP := \
 	$(CORE_DIR)/shared/c/system.cpp \
 	$(CORE_DIR)/shared/c/mutex.cpp \
 	$(CORE_DIR)/shared/c/sha1.cpp \
-	$(CORE_DIR)/b2/DiscGeometry.cpp \
-	$(CORE_DIR)/b2/DirectDiscImage.cpp \
+	$(CORE_DIR)/shared/c/file_io.cpp \
+	$(CORE_DIR)/beeb/src/DiscGeometry.cpp \
+	$(CORE_DIR)/beeb/src/DirectDiscImage.cpp \
 	$(CORE_DIR)/b2/filters.cpp \
 	$(CORE_DIR)/b2/Remapper.cpp \
 
@@ -60,6 +61,7 @@ SOURCES_CPP += \
 
 SOURCES_CPP += \
 	$(CORE_DIR)/shared/c/system_posix.cpp \
+	$(CORE_DIR)/shared/c/path_posix.cpp \
 
 else ifneq (,$(findstring unix,$(platform)))
 SOURCES_CPP += \
@@ -67,10 +69,12 @@ SOURCES_CPP += \
 
 SOURCES_CPP += \
 	$(CORE_DIR)/shared/c/system_posix.cpp \
+	$(CORE_DIR)/shared/c/path_posix.cpp \
 
 else ifneq (,$(findstring win,$(platform)))
 SOURCES_CPP += \
 	$(CORE_DIR)/shared/c/system_windows.cpp \
+	$(CORE_DIR)/shared/c/path_windows.cpp \
 
 endif
 
