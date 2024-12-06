@@ -217,6 +217,21 @@ uint8_t BBCMicroState::DebugGetMouseButtons() const {
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
+#if BBCMICRO_DEBUGGER
+bool BBCMicroState::DebugGetWD1770(const WD1770 **fdc_ptr, DiscInterfaceControl *disc_control_ptr) const {
+    if (!this->disc_interface) {
+        return false;
+    } else {
+        *fdc_ptr = &this->fdc;
+        *disc_control_ptr = this->disc_control;
+        return true;
+    }
+}
+#endif
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
 std::shared_ptr<const DiscImage> BBCMicroState::GetDiscImage(int drive) const {
     if (drive >= 0 && drive < NUM_DRIVES) {
         return this->drives[drive].disc_image;
