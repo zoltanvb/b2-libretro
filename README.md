@@ -10,7 +10,7 @@ Adaptation of [Tom Seddon's b2 emulator](https://github.com/tom-seddon/b2) for B
 
 # Documentation
 
-To be added to libretro doc site.
+Added to [libretro doc site](https://docs.libretro.com/library/b2/).
 
 # Bugs/feedback/etc.
 
