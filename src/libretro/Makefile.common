@@ -39,6 +39,7 @@ SOURCES_CPP := \
 	$(CORE_DIR)/beeb/src/TVOutput.cpp \
 	$(CORE_DIR)/beeb/src/type.cpp \
 	$(CORE_DIR)/beeb/src/video.cpp \
+	$(CORE_DIR)/beeb/src/uef.cpp \
 	$(CORE_DIR)/beeb/src/VideoULA.cpp \
 	$(CORE_DIR)/shared/c/log.cpp \
 	$(CORE_DIR)/shared/c/system.cpp \

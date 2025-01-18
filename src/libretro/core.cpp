@@ -39,7 +39,6 @@ no savestate
 compilation:
    manage static 6502_internal.inl - probably to stay
    test Win32/64, OSX, PS2, etc.
-   remove not needed ifdef changes
    clean up warnings
    big endian tvoutput
    .gitlab-ci test
@@ -70,6 +69,7 @@ functions:
    drive (and relay?) sound
    memory map
 
+
 main QoL
    intelligent zoom?
    keyboard layouts?
@@ -81,6 +81,11 @@ other QoL
    game-DB similar to CPC?
    tape input - not in b2 yet
 
+http://electrem.emuunlim.com/UEFSpecs.html
+https://github.com/stardot/beebem-windows/blob/bbde82f88e3d14fdf76cda292987e3bf175fa57c/Src/uefstate.cpp#L119
+>>> import UEFfile
+>>> u=UEFfile.UEFfile("ChuckieEgg33.uef")
+>>> hex(u.chunks[12][0])
 
 */
 #include <stdio.h>
@@ -96,6 +101,7 @@ other QoL
 #include "../beeb/include/beeb/TVOutput.h"
 #include "../beeb/include/beeb/OutputData.h"
 #include "../beeb/include/beeb/DirectDiscImage.h"
+#include "../beeb/include/beeb/uef.h"
 #include "../b2/filters.h"
 #include "../shared/h/shared/path.h"
 #include "roms.hpp"
@@ -669,7 +675,7 @@ void retro_get_system_info(struct retro_system_info *info)
   info->library_name     = "b2";
   info->library_version  = "v0.3";
   info->need_fullpath    = true;
-  info->valid_extensions = "ssd|dsd";
+  info->valid_extensions = "ssd|dsd|uef";
   //printf("retro_get_system_info \n");
 }
 
@@ -1169,8 +1175,10 @@ bool retro_load_game(const struct retro_game_info *info)
 
   check_variables();
 
-  if(info != nullptr)
-  {
+  if(info == nullptr)
+   return true;
+
+/*
     log_cb(RETRO_LOG_INFO, "Loading game: %s \n",info->path);
     create_core(&core);
     
@@ -1194,7 +1202,16 @@ bool retro_load_game(const struct retro_game_info *info)
     else
       core->SetKeyState(BeebKey_Shift,true);  
    }
-  }
+*/
+
+  log_cb(RETRO_LOG_INFO, "Reading UEF: %s \n",info->path);
+   UEFReader* ur = new UEFReader(&logObject);
+   log_cb(RETRO_LOG_INFO, "Loading1\n");
+    std::vector<uint8_t> contents;
+    LoadFile(&contents, info->path, &logObject);
+   log_cb(RETRO_LOG_INFO, "Loading2\n");
+    ur->Load(contents);
+    log_cb(RETRO_LOG_INFO, "Number of chunks: %d\n",ur->GetNumChunks());
 /*
     std::string filename(info->path);
     std::string contentExt;

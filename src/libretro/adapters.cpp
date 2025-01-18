@@ -71,12 +71,12 @@ done:
 
 
 
-
+/*
 bool LoadFile(std::vector<uint8_t> *data, const std::string &path, const LogSet &logs, uint32_t flags)
 {
 printf ("LoadFile: %s\n",path.c_str());
 return false;
-}
+}*/
 bool SaveFile(const std::vector<uint8_t> &data, const std::string &path, const LogSet &logs)
 {
 printf ("SaveFile: %s\n",path.c_str());
