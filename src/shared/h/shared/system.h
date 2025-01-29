@@ -13,6 +13,7 @@
 #include <stddef.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <errno.h>
 #ifdef _MSC_VER
 // This is the relevant part of intrin.h. Don't #include it; it is somewhat slow
 // to parse (for whatever reason) and it saves a few seconds in a full rebuild
