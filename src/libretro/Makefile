@@ -77,6 +77,8 @@ else ifeq ($(platform), osx)
 	OSX_LT_MAVERICKS = `(( $(OSXVER) <= 9)) && echo "YES"`
 	ifeq ($(OSX_LT_MAVERICKS),"YES")
 		MINVERSION = -mmacosx-version-min=10.5
+	else
+		MINVERSION = -mmacosx-version-min=10.12
 	endif
 	fpic += $(MINVERSION)
 
@@ -88,8 +90,8 @@ else ifeq ($(platform), osx)
 		LDFLAGS  += $(TARGET_RULE)
    endif
 
-	CFLAGS  += $(ARCHFLAGS)
-	CXXFLAGS  += $(ARCHFLAGS)
+	CFLAGS  += $(ARCHFLAGS) -DSYSTEM_HAVE_STRLCPY
+	CXXFLAGS  += $(ARCHFLAGS) -DSYSTEM_HAVE_STRLCPY
 	LDFLAGS += $(ARCHFLAGS)
 
 # iOS
@@ -120,6 +122,10 @@ else
 endif
 	PLATFORM_DEFINES := $(MINVERSION)
 
+	CFLAGS  += $(ARCHFLAGS) -DSYSTEM_HAVE_STRLCPY -DIOS
+	CXXFLAGS  += $(ARCHFLAGS) -DSYSTEM_HAVE_STRLCPY -DIOS
+	LDFLAGS += $(ARCHFLAGS)
+
 # tvOS
 else ifeq ($(platform), tvos-arm64)
 	TARGET := $(TARGET_NAME)_libretro_tvos.dylib
@@ -134,6 +140,11 @@ else ifeq ($(platform), tvos-arm64)
 	CC_AS = perl ./tools/gas-preprocessor.pl $(CC)
 	CXX   = c++ -arch arm64 -isysroot $(IOSSDK)
 
+	PLATFORM_DEFINES := -mappletvos-version-min=11.0
+
+	CFLAGS  += $(ARCHFLAGS) -DSYSTEM_HAVE_STRLCPY -DIOS
+	CXXFLAGS  += $(ARCHFLAGS) -DSYSTEM_HAVE_STRLCPY -DIOS
+	LDFLAGS += $(ARCHFLAGS)
 
 # Lightweight PS3 Homebrew SDK
 else ifneq (,$(filter $(platform), ps3 psl1ght))
