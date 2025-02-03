@@ -1,5 +1,6 @@
 /.dir-locals.el
 /build/
+/obj/
 /etc/b2_tests/[Zz]/
 /dependencies/ProcessorTests/
 *.etl
