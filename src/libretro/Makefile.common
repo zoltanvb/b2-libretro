@@ -53,8 +53,9 @@ SOURCES_CPP := \
 
 SOURCES_C := \
 	$(CORE_DIR)/6502/c/6502.c \
-	
-ifneq (,$(findstring osx,$(platform)))
+	$(CORE_DIR)/shared/c/path.c \
+
+ifneq (,$(filter osx ios-arm64 tvos-arm64,$(platform)))
 SOURCES_CPP += \
 	$(CORE_DIR)/shared/c/system_osx.cpp \
 
