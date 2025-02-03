@@ -46,6 +46,7 @@ SOURCES_CPP := \
 	$(CORE_DIR)/shared/c/mutex.cpp \
 	$(CORE_DIR)/shared/c/sha1.cpp \
 	$(CORE_DIR)/shared/c/file_io.cpp \
+	$(CORE_DIR)/shared/c/path.cpp \
 	$(CORE_DIR)/beeb/src/DiscGeometry.cpp \
 	$(CORE_DIR)/beeb/src/DirectDiscImage.cpp \
 	$(CORE_DIR)/b2/filters.cpp \
@@ -53,7 +54,6 @@ SOURCES_CPP := \
 
 SOURCES_C := \
 	$(CORE_DIR)/6502/c/6502.c \
-	$(CORE_DIR)/shared/c/path.c \
 
 ifneq (,$(filter osx ios-arm64 tvos-arm64,$(platform)))
 SOURCES_CPP += \

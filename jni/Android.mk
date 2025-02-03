@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
 CORE_DIR := $(LOCAL_PATH)/../src
-
+platform := unix
 include $(CORE_DIR)/libretro/Makefile.common
 
 COREFLAGS := -D__LIBRETRO__ -DB2_LIBRETRO_CORE -DHAVE_STRLCPY -DBUILD_TYPE_Final -DBBCMICRO_TRACE $(INCFLAGS)

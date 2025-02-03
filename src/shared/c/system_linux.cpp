@@ -6,8 +6,10 @@
 #include <strings.h>
 #include <inttypes.h>
 #include <stdlib.h>
+#if !defined(ANDROID)
 #include <execinfo.h>
 #include <uuid/uuid.h>
+#endif
 #include <shared/debug.h>
 #include <fcntl.h>
 #include <sys/wait.h>
@@ -212,7 +214,11 @@ char **GetBacktraceSymbols(void *const *addresses, int num_addresses) {
 
     if (num_addresses <= 0) {
         /* somebody else's problem... */
+#if !defined(ANDROID)
         return backtrace_symbols(addresses, num_addresses);
+#else
+    return (char **)NULL;
+#endif
     }
 
     char *result = NULL;
@@ -340,7 +346,11 @@ done:
 
 #else
 
+#if !defined(ANDROID)
     return backtrace_symbols(addresses, num_addresses);
+#else
+    return (char **)NULL;
+#endif
 
 #endif
 }
