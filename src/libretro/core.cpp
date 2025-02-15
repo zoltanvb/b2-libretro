@@ -127,7 +127,8 @@ char retro_system_bios_directory[512];
 char retro_system_save_directory[512];
 char retro_content_filepath[512];
 
-uint16_t audioBuffer[B2_SAMPLE_RATE*1000*2];
+// TODO: optimize size instead of a full second + add guards when filling
+uint16_t audioBuffer[B2_SAMPLE_RATE*2];
 bool inputStateMap[256][1];
 
 retro_usec_t curr_frame_time = 0;
@@ -1088,7 +1089,6 @@ void retro_run(void)
       updateCount_prevframe = updateCount;
    }
 
-   std::vector<uint32_t> result(pixels, pixels + TV_TEXTURE_WIDTH * TV_TEXTURE_HEIGHT);
    unsigned stride  = TV_TEXTURE_WIDTH;
    //video_cb(pixels, TV_TEXTURE_WIDTH, TV_TEXTURE_HEIGHT, stride << 2);
    video_cb(pixels, TV_TEXTURE_WIDTH, TV_TEXTURE_HEIGHT/2, stride << 3);
