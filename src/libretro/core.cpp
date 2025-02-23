@@ -272,7 +272,7 @@ static void update_keyboard_cb(bool down, unsigned keycode,
     }
     else
     {
-      core->SetKeyState(beeb_libretro_keymap.at(keycode),down);  
+      core->SetKeyState(beeb_libretro_keymap.at(keycode),down);
     }
   }
 }
@@ -1204,14 +1204,60 @@ bool retro_load_game(const struct retro_game_info *info)
    }
 */
 
+  UEFChunk chunk;
   log_cb(RETRO_LOG_INFO, "Reading UEF: %s \n",info->path);
-   UEFReader* ur = new UEFReader(&logObject);
-   log_cb(RETRO_LOG_INFO, "Loading1\n");
-    std::vector<uint8_t> contents;
-    LoadFile(&contents, info->path, &logObject);
-   log_cb(RETRO_LOG_INFO, "Loading2\n");
-    ur->Load(contents);
-    log_cb(RETRO_LOG_INFO, "Number of chunks: %d\n",ur->GetNumChunks());
+  UEFReader* ur = new UEFReader(&logObject);
+  std::vector<uint8_t> contents;
+  LoadFile(&contents, info->path, &logObject);
+  ur->Load(contents);
+  log_cb(RETRO_LOG_INFO, "Number of chunks: %d\n",ur->GetNumChunks());
+  for (size_t i=0;i<ur->GetNumChunks();i++)
+  {
+    chunk = ur->GetChunkByIndex(i);
+    log_cb(RETRO_LOG_INFO, "Chunk %02d: %04X size %d\n",i,chunk.id,chunk.size);
+    if (chunk.id == UEFChunkType_Chunk_StateBeebEmMainMem)
+    {
+      log_cb(RETRO_LOG_INFO, "Loading main mem\n",i,chunk.id,chunk.size);
+      M6502Word addr;
+      addr.w = 0;
+      core->DebugSetBytes(addr, 0, false, (uint8_t*)chunk.data, chunk.size);
+            
+    }
+    if (chunk.id == UEFChunkType_Chunk_StateBeebEmSWRamMem)
+    {
+      log_cb(RETRO_LOG_INFO, "Loading sideways mem, bank %d\n",*(uint8_t*)chunk.data);
+    }
+    if (chunk.id == UEFChunkType_Chunk_StateBeebEm6502)
+    {
+      log_cb(RETRO_LOG_INFO, "Loading 6502 state\n",i,chunk.id,chunk.size);
+    }
+    if (chunk.id == UEFChunkType_Chunk_StateBeebEmRomRegs)
+    {
+      log_cb(RETRO_LOG_INFO, "Loading ROM regs\n",i,chunk.id,chunk.size);
+    }
+    if (chunk.id == UEFChunkType_Chunk_StateBeebEmIntegraBHiddenMem)
+    {
+      log_cb(RETRO_LOG_INFO, "Loading sideways RAM\n",i,chunk.id,chunk.size);
+    }
+    if (chunk.id == UEFChunkType_Chunk_StateBeebEmVideo)
+    {
+      log_cb(RETRO_LOG_INFO, "Loading video state\n",i,chunk.id,chunk.size);
+    }
+    if (chunk.id == UEFChunkType_Chunk_StateBeebEmVia)
+    {
+      log_cb(RETRO_LOG_INFO, "Loading VIA state\n",i,chunk.id,chunk.size);
+    }
+    if (chunk.id == UEFChunkType_Chunk_StateBeebEmSound)
+    {
+      log_cb(RETRO_LOG_INFO, "Loading sound state\n",i,chunk.id,chunk.size);
+    }
+    if (chunk.id == UEFChunkType_Chunk_StateBeebEm8271)
+    {
+      log_cb(RETRO_LOG_INFO, "Loading 8271 state\n",i,chunk.id,chunk.size);
+    }
+  }
+  // BBCMicro::DebugSetBytes?
+    
 /*
     std::string filename(info->path);
     std::string contentExt;
