@@ -441,6 +441,7 @@ class BBCMicro : private WD1770Handler {
 
     void DebugStepOver(uint32_t dso);
     void DebugStepIn(uint32_t dso);
+    void DebugSetCPUReg(uint32_t reg, uint32_t value);
 
     bool HasDebugState() const;
     std::shared_ptr<DebugState> TakeDebugState();

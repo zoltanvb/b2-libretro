@@ -83,6 +83,16 @@ const M6502 *BBCMicroState::DebugGetM6502(uint32_t dso) const {
 
     return &this->cpu;
 }
+M6502 *BBCMicroState::DebugGetM6502W(uint32_t dso) {
+    if (dso & BBCMicroDebugStateOverride_Parasite) {
+        if (this->parasite_type != BBCMicroParasiteType_None) {
+            return &this->parasite_cpu;
+        }
+    }
+
+    return &this->cpu;
+}
+
 #endif
 
 //////////////////////////////////////////////////////////////////////////

@@ -82,7 +82,7 @@ other QoL
    tape input - not in b2 yet
 
 http://electrem.emuunlim.com/UEFSpecs.html
-https://github.com/stardot/beebem-windows/blob/bbde82f88e3d14fdf76cda292987e3bf175fa57c/Src/uefstate.cpp#L119
+https://github.com/stardot/beebem-windows/blob/master/Src/UefState.cpp line 424
 >>> import UEFfile
 >>> u=UEFfile.UEFfile("ChuckieEgg33.uef")
 >>> hex(u.chunks[12][0])
@@ -1226,10 +1226,52 @@ bool retro_load_game(const struct retro_game_info *info)
     if (chunk.id == UEFChunkType_Chunk_StateBeebEmSWRamMem)
     {
       log_cb(RETRO_LOG_INFO, "Loading sideways mem, bank %d\n",*(uint8_t*)chunk.data);
+      std::vector<unsigned char> ramvec((((uint8_t*)chunk.data)+1),(((uint8_t*)chunk.data)+chunk.size-1));
+      core->SetSidewaysRAM(*(uint8_t*)chunk.data, std::make_shared<std::vector<unsigned char>>(ramvec));
     }
     if (chunk.id == UEFChunkType_Chunk_StateBeebEm6502)
     {
-      log_cb(RETRO_LOG_INFO, "Loading 6502 state\n",i,chunk.id,chunk.size);
+      log_cb(RETRO_LOG_INFO, "Loading 6502 state\n");
+      uint32_t value = (*(uint8_t*)chunk.data) + (*((uint8_t*)chunk.data+1))<<8;
+      log_cb(RETRO_LOG_INFO, "PC: %04x\n",value);
+      core->DebugSetCPUReg(UEF6502Reg_pc, value);
+      value = (*((uint8_t*)chunk.data+2));
+      log_cb(RETRO_LOG_INFO, "Acc: %02x\n",value);
+      core->DebugSetCPUReg(UEF6502Reg_a, value);
+      value = (*((uint8_t*)chunk.data+3));
+      log_cb(RETRO_LOG_INFO, "X: %02x\n",value);
+      core->DebugSetCPUReg(UEF6502Reg_x, value);
+      value = (*((uint8_t*)chunk.data+4));
+      log_cb(RETRO_LOG_INFO, "Y: %02x\n",value);
+      core->DebugSetCPUReg(UEF6502Reg_y, value);
+      value = (*((uint8_t*)chunk.data+5));
+      log_cb(RETRO_LOG_INFO, "Stack: %02x\n",value);
+      core->DebugSetCPUReg(UEF6502Reg_s, value);
+      value = (*((uint8_t*)chunk.data+6));
+      log_cb(RETRO_LOG_INFO, "PSR: %02x\n",value);
+      core->DebugSetCPUReg(UEF6502Reg_p, value);
+      value = (*((uint8_t*)chunk.data+11));
+      log_cb(RETRO_LOG_INFO, "IntStatus: %02x\n",value);
+      //core->DebugSetCPUReg(UEF6502Reg_p, value);
+      value = (*((uint8_t*)chunk.data+12));
+      log_cb(RETRO_LOG_INFO, "NMIStatus: %02x\n",value);
+      //core->DebugSetCPUReg(UEF6502Reg_p, value);
+      value = (*((uint8_t*)chunk.data+13));
+      log_cb(RETRO_LOG_INFO, "NMILock: %02x\n",value);
+      //core->DebugSetCPUReg(UEF6502Reg_p, value);
+
+/*	ProgramCounter = UEFRead16(SUEF);
+	Accumulator = UEFRead8(SUEF);
+	XReg = UEFRead8(SUEF);
+	YReg = UEFRead8(SUEF);
+	StackReg = UEFRead8(SUEF);
+	PSR = UEFRead8(SUEF);
+	// TotalCycles = fget32(SUEF);
+	UEFRead32(SUEF); // Unused, was: Dlong
+	intStatus = UEFRead8(SUEF);
+	NMIStatus = UEFRead8(SUEF);
+	NMILock = UEFReadBool(SUEF);*/
+
     }
     if (chunk.id == UEFChunkType_Chunk_StateBeebEmRomRegs)
     {

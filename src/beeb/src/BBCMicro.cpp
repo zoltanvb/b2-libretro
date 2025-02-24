@@ -29,6 +29,7 @@
 #include <set>
 #include <unordered_set>
 #include <shared/sha1.h>
+#include <beeb/uef.h>
 
 #include <shared/enum_decl.h>
 #include "BBCMicro_private.inl"
@@ -1712,6 +1713,41 @@ void BBCMicro::DebugStepIn(uint32_t dso) {
 
     const M6502 *cpu = m_state.DebugGetM6502(dso);
     this->SetDebugStepType(BBCMicroStepType_StepIn, cpu);
+}
+#endif
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+#if BBCMICRO_DEBUGGER
+void BBCMicro::DebugSetCPUReg(uint32_t reg, uint32_t value) {
+/*    if (!m_debug) {
+        return;
+    }*/
+
+    M6502 *cpu = m_state.DebugGetM6502W(0);
+    if (reg == UEF6502Reg_pc)
+      cpu->pc.w = (uint16_t) value;
+    if (reg == UEF6502Reg_s)
+      cpu->s.b.l = (uint8_t) value;
+
+    if (reg == UEF6502Reg_a)
+      cpu->a = (uint8_t) value;
+    if (reg == UEF6502Reg_x)
+      cpu->x = (uint8_t) value;
+    if (reg == UEF6502Reg_y)
+      cpu->y = (uint8_t) value;
+    if (reg == UEF6502Reg_p)
+      cpu->p.value = (uint8_t) value;
+
+/*EPNV(ad,        3)
+EPNV(ia,        4)
+EPNV(opcode_pc, 5)
+EPNV(opcode,   14)
+EPNV(data,     15)
+EPNV(acarry,   16)
+EPNV(d1x1,     17)*/
+
 }
 #endif
 

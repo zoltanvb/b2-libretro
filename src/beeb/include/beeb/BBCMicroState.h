@@ -186,6 +186,7 @@ class BBCMicroState {
 
 #if BBCMICRO_DEBUGGER
     const M6502 *DebugGetM6502(uint32_t dso) const;
+    M6502 *DebugGetM6502W(uint32_t dso);
     const ExtMem *DebugGetExtMem() const;
     const MC146818 *DebugGetRTC() const;
     const Tube *DebugGetTube() const;
