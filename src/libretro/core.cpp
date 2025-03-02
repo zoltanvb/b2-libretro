@@ -1204,6 +1204,10 @@ bool retro_load_game(const struct retro_game_info *info)
    }
 */
 
+  /*VideoDataUnit vunit;
+  SoundDataUnit sunit;
+  core->Update(&vunit, &sunit);*/
+  /* Run until isAboutToExecute somehow */
   UEFChunk chunk;
   log_cb(RETRO_LOG_INFO, "Reading UEF: %s \n",info->path);
   UEFReader* ur = new UEFReader(&logObject);
@@ -1232,7 +1236,7 @@ bool retro_load_game(const struct retro_game_info *info)
     if (chunk.id == UEFChunkType_Chunk_StateBeebEm6502)
     {
       log_cb(RETRO_LOG_INFO, "Loading 6502 state\n");
-      uint32_t value = (*(uint8_t*)chunk.data) + (*((uint8_t*)chunk.data+1))<<8;
+      uint32_t value = (*(uint8_t*)chunk.data) + ((uint32_t)(*((uint8_t*)chunk.data+1)))*256;
       log_cb(RETRO_LOG_INFO, "PC: %04x\n",value);
       core->DebugSetCPUReg(UEF6502Reg_pc, value);
       value = (*((uint8_t*)chunk.data+2));

@@ -531,8 +531,12 @@ parasite_update_done:
 #endif
             }
 
+            if (M6502_IsAboutToExecute(&m_state.cpu)) 
+                printf("PC: %04X\n",m_state.cpu.pc.w);
+
             if constexpr ((UPDATE_FLAGS & BBCMicroUpdateFlag_Hacks) != 0) {
                 if (M6502_IsAboutToExecute(&m_state.cpu)) {
+                    printf("PC: %04X\n",m_state.cpu.pc.w);
                     if (!m_host_instruction_fns.empty()) {
 
                         // This is a bit bizarre, but I just can't stomach the
