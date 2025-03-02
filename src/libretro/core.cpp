@@ -172,14 +172,14 @@ TVOutput tv;
 VideoDataUnit vdu;
 SoundDataUnit sdu;
 static std::shared_ptr<const std::string> COPY_BASIC;
-static BeebKey joypad_button_assignments[16];
+static BeebKey joypad_button_assignments[48];
 #define MAX_CORE_VARS 50
 static retro_variable core_vars[MAX_CORE_VARS] = {0};
 static char core_var_key[MAX_CORE_VARS][50] = {0};
 static char core_var_value[MAX_CORE_VARS][1024] = {0};
 int prevJoystickAxes[4] = {0};
 bool prevJoystickButtons[2] = {0};
-bool prevJoypadButtons[16] = {0};
+bool prevJoypadButtons[48] = {0};
 static const char bbcMicroType[50] = {0};
 static int model_index = 0;
 static const ROMType DEFAULT_ROM_TYPES[16] = {};
@@ -828,6 +828,37 @@ static void update_input(void)
          if (currInputState != prevJoypadButtons[i]) {
             core->SetKeyState(joypad_button_assignments[i],currInputState);
             prevJoypadButtons[i] = currInputState;
+         }
+      }
+    }
+
+    for (int i=RETRO_DEVICE_INDEX_ANALOG_LEFT; i<=RETRO_DEVICE_INDEX_ANALOG_RIGHT; i++)
+    {
+      int axisValue;
+
+      for (int j=RETRO_DEVICE_ID_JOYPAD_UP; j<=RETRO_DEVICE_ID_JOYPAD_RIGHT; j++)
+      {
+         size_t assignmentIndex = 16+i*16+j;
+         currInputState = false;
+         if (joypad_button_assignments[assignmentIndex] != BeebKey_None) {
+            if (j == RETRO_DEVICE_ID_JOYPAD_UP || j == RETRO_DEVICE_ID_JOYPAD_DOWN)
+            {
+               axisValue = input_state_cb(0, RETRO_DEVICE_ANALOG, i, RETRO_DEVICE_ID_ANALOG_Y);
+               if ((j == RETRO_DEVICE_ID_JOYPAD_UP   && axisValue < -0x4000) ||
+                   (j == RETRO_DEVICE_ID_JOYPAD_DOWN && axisValue >  0x4000))
+                     currInputState = true;
+            }
+            else if (j == RETRO_DEVICE_ID_JOYPAD_LEFT || j == RETRO_DEVICE_ID_JOYPAD_RIGHT)
+            {
+               axisValue = input_state_cb(0, RETRO_DEVICE_ANALOG, i, RETRO_DEVICE_ID_ANALOG_X);
+               if ((j == RETRO_DEVICE_ID_JOYPAD_LEFT  && axisValue < -0x4000) ||
+                   (j == RETRO_DEVICE_ID_JOYPAD_RIGHT && axisValue >  0x4000))
+                     currInputState = true;
+            }
+            if (currInputState != prevJoypadButtons[assignmentIndex]) {
+               core->SetKeyState(joypad_button_assignments[assignmentIndex],currInputState);
+               prevJoypadButtons[assignmentIndex] = currInputState;
+            }
          }
       }
     }
