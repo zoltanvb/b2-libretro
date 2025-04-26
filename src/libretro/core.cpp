@@ -941,7 +941,8 @@ static void audio_callback_batch(void)
   //printf("sending frames: %d exp %d frame_time: %d\n",nFrames,exp, curr_frame_time);
   //if (nFrames != exp)
   // printf("sending diff frames: %d exp %d frame_time: %d\n",nFrames,exp, curr_frame_time);
-  audio_batch_cb((int16_t*)audioBuffer, exp);
+  while (exp -= audio_batch_cb((int16_t*)audioBuffer, exp)) {}
+  //audio_batch_cb((int16_t*)audioBuffer, exp);
 }
 
 void retro_run(void)
