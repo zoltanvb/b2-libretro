@@ -114,7 +114,7 @@ struct machine_type {
    const char * nvram_type;
    const char * nvram;
 };
-#define MACHINE_TYPES_COUNT 8
+#define MACHINE_TYPES_COUNT 9
 machine_type machine_types[] = {
    {  
       "B/Acorn 1770",
@@ -364,6 +364,38 @@ machine_type machine_types[] = {
       "Unknown",
       ""
    },
+   {
+      "Master 128 (MOS 3.20)",
+      &MOS320_MOS_ROM,
+      BBCMicroTypeID_Master,
+      &DISC_INTERFACE_MASTER128,
+      {
+                nullptr,
+                nullptr,
+                nullptr,
+                nullptr,
+                &writeable_ROM,
+                &writeable_ROM,
+                &writeable_ROM,
+                &writeable_ROM,
+                nullptr,
+                &MOS320_DFS_ROM,
+                nullptr,
+                nullptr,
+                &MOS320_BASIC4_ROM,
+                &MOS320_ADFS_ROM,
+                nullptr,
+                &MOS320_TERMINAL_ROM,
+      },
+      false,
+      false,
+      false,
+      BBCMicroParasiteType_None,
+      nullptr,
+      "Master128",
+      "0000000000c9ffff000017803703000102000000000000000000000000000000000000000000000000000000000000000000"
+   },
+
 };
 // TODO: support the rest of the types
 /*
