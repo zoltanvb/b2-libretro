@@ -109,7 +109,12 @@ const std::map<unsigned, BeebKey> beeb_libretro_keymap = {
     {RETROK_KP_MINUS, BeebKey_KeypadMinus},
     {RETROK_KP_DIVIDE,BeebKey_KeypadSlash},
     {RETROK_KP_MULTIPLY,BeebKey_KeypadStar},
-// TODO: map the 3 extra keypad keys on the Master somewhere (delete, ', #)
+// The 3 extra keypad keys on the Master (delete, ', #) are mapped to some RETROK values,
+// but those are typically not available on a physical PC keyboard.
+    {RETROK_HASH,     BeebKey_KeypadHash},
+    {RETROK_CLEAR,    BeebKey_KeypadDelete},
+    {RETROK_KP_EQUALS,BeebKey_KeypadComma},
+
 };
 
 const std::map<std::string, BeebKey> joypad_keymap = {
@@ -196,7 +201,27 @@ const std::map<std::string, BeebKey> joypad_keymap = {
     {"Shift Lock",BeebKey_ShiftLock},
     {"Delete",   BeebKey_Delete},
     {"Copy",     BeebKey_Copy},
-// Keypad not added until BBC Master support is implemented/tested
+
+    {"Keypad 0", BeebKey_Keypad0},
+    {"Keypad 1", BeebKey_Keypad1},
+    {"Keypad 2", BeebKey_Keypad2},
+    {"Keypad 3", BeebKey_Keypad3},
+    {"Keypad 4", BeebKey_Keypad4},
+    {"Keypad 5", BeebKey_Keypad5},
+    {"Keypad 6", BeebKey_Keypad6},
+    {"Keypad 7", BeebKey_Keypad7},
+    {"Keypad 8", BeebKey_Keypad8},
+    {"Keypad 9", BeebKey_Keypad9},
+    {"Keypad . (dot)", BeebKey_KeypadStop},
+    {"Keypad Return", BeebKey_KeypadReturn},
+    {"Keypad +", BeebKey_KeypadPlus},
+    {"Keypad -", BeebKey_KeypadMinus},
+    {"Keypad /", BeebKey_KeypadSlash},
+    {"Keypad *", BeebKey_KeypadStar},
+    {"Keypad #", BeebKey_KeypadHash},
+    {"Keypad Delete", BeebKey_KeypadDelete},
+    {"Keypad , (comma)", BeebKey_KeypadComma},
+
 };
 
 const std::map<std::string, unsigned> joypad_buttonmap = {
