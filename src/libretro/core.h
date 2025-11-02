@@ -400,61 +400,6 @@ machine_type machine_types[] = {
 // TODO: support the rest of the types
 /*
         {
-            "name": "Master 128 (MOS 3.20)",
-            "os": {
-                "standard_rom": "MOS320_MOS"
-            },
-            "type": "Master",
-            "disc_interface": "Master 128",
-            "roms": [
-                null,
-                null,
-                null,
-                null,
-                {
-                    "writeable": true
-                },
-                {
-                    "writeable": true
-                },
-                {
-                    "writeable": true
-                },
-                {
-                    "writeable": true
-                },
-                null,
-                {
-                    "standard_rom": "MOS320_DFS"
-                },
-                {
-                    "standard_rom": "MOS320_VIEWSHEET"
-                },
-                {
-                    "standard_rom": "MOS320_EDIT"
-                },
-                {
-                    "standard_rom": "MOS320_BASIC4"
-                },
-                {
-                    "standard_rom": "MOS320_ADFS"
-                },
-                {
-                    "standard_rom": "MOS320_VIEW"
-                },
-                {
-                    "standard_rom": "MOS320_TERMINAL"
-                }
-            ],
-            "ext_mem": false,
-            "beeblink": false,
-            "adji": false,
-            "parasite_type": "None",
-            "parasite_os": null,
-            "nvram_type": "Master128",
-            "nvram": "0000000000c9ffff000017803703000102000000000000000000000000000000000000000000000000000000000000000000"
-        },
-        {
             "name": "Master 128 (MOS 3.50)",
             "os": {
                 "standard_rom": "MOS350_MOS"
