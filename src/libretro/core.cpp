@@ -285,7 +285,8 @@ static void create_core(BBCMicro** newcore)
       CreateBBCMicroType(machine_types[model_index].type,DEFAULT_ROM_TYPES),
       machine_types[model_index].disc_interface,
       machine_types[model_index].parasite_type,
-      {},nullptr,0,nullptr,{0});
+      GetDefaultNVRAM(machine_types[model_index].type),
+      nullptr,0,nullptr,{0});
 
     (*newcore)->SetOSROM(          std::make_shared<std::array<unsigned char, 16384>>(*machine_types[model_index].os_standard_rom));
     for (int k=15;k>=0;k--)

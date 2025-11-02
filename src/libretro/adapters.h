@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <stdint.h>
+#include "../beeb/include/beeb/type.h"
 #include "../b2/Messages.h"
 #include "../shared/h/shared/file_io.h"
 #include "../shared/h/shared/log.h"
@@ -46,5 +47,7 @@ class LibretroMessages : public LogSet {
     Log m_info, m_warning, m_error;
 
 };
+
+std::vector<uint8_t> GetDefaultNVRAM(BBCMicroTypeID type);
 
 #endif

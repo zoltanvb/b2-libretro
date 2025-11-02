@@ -127,3 +127,25 @@ LibretroMessages::LibretroMessages()
     , m_error("", (LogPrinter*)&lplibretro, false)
 {
 }
+
+std::vector<uint8_t> GetDefaultNVRAM(BBCMicroTypeID type) {
+    std::vector<uint8_t> nvram(50);
+
+    if (type == BBCMicroTypeID_Master)
+    {
+       nvram[5] = 0xC9;  // 5 - LANG 12; FS 9
+       nvram[6] = 0xFF;  // 6 - INSERT 0 ... INSERT 7
+       nvram[7] = 0xFF;  // 7 - INSERT 8 ... INSERT 15
+       nvram[8] = 0x00;  // 8
+       nvram[9] = 0x00;  // 9
+       nvram[10] = 0x17; //10 - MODE 7; SHADOW 0; TV 0 1
+       nvram[11] = 0x80; //11 - FLOPPY
+       nvram[12] = 55;   //12 - DELAY 55
+       nvram[13] = 0x03; //13 - REPEAT 3
+       nvram[14] = 0x00; //14
+       nvram[15] = 0x01; //15 - TUBE
+       nvram[16] = 0x02; //16 - LOUD
+    }
+
+    return nvram;
+}
