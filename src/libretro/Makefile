@@ -57,7 +57,7 @@ else ifneq (,$(findstring armv,$(platform)))
 	TARGET := $(TARGET_NAME)_libretro.so
 	fpic := -fPIC
 	SHARED := -shared -Wl,-version-script=link.T
-	LDFLAGS += -static-libgcc -static-libstdc++
+	LDFLAGS += -static-libgcc -static-libstdc++ -latomic
 	ifneq (,$(findstring cortexa8,$(platform)))
 		PLATFORM_DEFINES += -marm -mcpu=cortex-a8
 	else ifneq (,$(findstring cortexa9,$(platform)))
