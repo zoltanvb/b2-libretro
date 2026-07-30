@@ -288,7 +288,14 @@ int vasprintf(char **buf, const char *fmt, va_list v);
 // BSD extension.
 //
 // See https://lwn.net/Articles/612244/
-#ifndef HAVE_STRLCPY
+// glibc 2.38+ exports strlcpy from <string.h> with C linkage. The
+// declaration below carries C++ linkage and produces a conflicting-
+// declaration error on those systems when building without CMake (which
+// sets SYSTEM_HAVE_STRLCPY via its own check_cxx_source_compiles probe).
+// Detect glibc >= 2.38 directly so the standalone Makefile build is safe.
+#if !defined(HAVE_STRLCPY) && \
+    !(defined(__GLIBC__) && \
+      ((__GLIBC__ > 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 38)))
 size_t strlcpy(char *dest, const char *src, size_t size);
 #endif // HAVE_STRLCPY
 #endif
