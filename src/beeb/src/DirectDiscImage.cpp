@@ -6,6 +6,10 @@
 #include <shared/path.h>
 #include <shared/log.h>
 
+#ifdef B2_LIBRETRO_CORE
+#include "../../libretro/vfs.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
@@ -137,7 +141,11 @@ bool DirectDiscImage::Read(uint8_t *value,
         return false;
     }
 
+#ifdef B2_LIBRETRO_CORE
+    int c = retro_vfs_fgetc(reinterpret_cast<retro_vfs_file *>(m_fp));
+#else
     int c = fgetc(m_fp);
+#endif
     if (c == EOF) {
         // This case is OK - the disc image is logically its full size, even
         // when truncated.
@@ -165,9 +173,15 @@ bool DirectDiscImage::Write(uint8_t side,
     }
 
     bool good = false;
+#ifdef B2_LIBRETRO_CORE
+    if (retro_vfs_fputc(value, reinterpret_cast<retro_vfs_file *>(m_fp)) != EOF) {
+        good = true;
+    }
+#else
     if (fputc(value, m_fp) != EOF) {
         good = true;
     }
+#endif
 
     return good;
 }
@@ -248,7 +262,11 @@ bool DirectDiscImage::fopenAndSeek(bool write,
             mode = "rb";
         }
 
+#ifdef B2_LIBRETRO_CORE
+        m_fp = reinterpret_cast<FILE *>(retro_vfs_fopen(m_path, mode));
+#else
         m_fp = fopenUTF8(m_path.c_str(), mode);
+#endif
         if (!m_fp) {
             return false;
         }
@@ -256,10 +274,17 @@ bool DirectDiscImage::fopenAndSeek(bool write,
         m_fp_write = write;
     }
 
+#ifdef B2_LIBRETRO_CORE
+    if (retro_vfs_fseek(reinterpret_cast<retro_vfs_file *>(m_fp), (int64_t)index, SEEK_SET) != 0) {
+        this->Close();
+        return false;
+    }
+#else
     if (fseek(m_fp, (long)index, SEEK_SET) != 0) {
         this->Close();
         return false;
     }
+#endif
 
     return true;
 }
@@ -269,7 +294,11 @@ bool DirectDiscImage::fopenAndSeek(bool write,
 
 void DirectDiscImage::Close() const {
     if (m_fp) {
+#ifdef B2_LIBRETRO_CORE
+        retro_vfs_fclose(reinterpret_cast<retro_vfs_file *>(m_fp));
+#else
         fclose(m_fp);
+#endif
         m_fp = nullptr;
     }
 }

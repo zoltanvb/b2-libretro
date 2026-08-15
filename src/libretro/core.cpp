@@ -103,6 +103,7 @@ other QoL
 #include "libretro.h"
 #include "adapters.h"
 #include "b2_libretro_keymap.h"
+#include "vfs.h"
 
 LOG_DEFINE(OUTPUT,"OUTPUT",&log_printer_nowhere,false);
 
@@ -1200,6 +1201,8 @@ bool retro_load_game(const struct retro_game_info *info)
   }
 
   check_variables();
+
+  retro_vfs_init(environ_cb);
 
   if(info != nullptr)
   {

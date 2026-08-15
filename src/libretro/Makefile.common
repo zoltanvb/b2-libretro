@@ -7,6 +7,7 @@ INCFLAGS := \
 SOURCES_CPP := \
 	$(CORE_DIR)/libretro/adapters.cpp \
 	$(CORE_DIR)/libretro/core.cpp \
+	$(CORE_DIR)/libretro/vfs.cpp \
 	$(CORE_DIR)/beeb/src/6502.cpp \
 	$(CORE_DIR)/beeb/src/6522.cpp \
 	$(CORE_DIR)/beeb/src/1770.cpp \

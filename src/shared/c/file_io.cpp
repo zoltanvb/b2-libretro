@@ -9,6 +9,10 @@
 #include <shared/file_io.inl>
 #include <shared/enum_end.h>
 
+#ifdef B2_LIBRETRO_CORE
+#include "../../libretro/vfs.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
@@ -53,12 +57,15 @@ static bool LoadFile2(ContType *data,
                       uint32_t flags,
                       const char *mode) {
     static_assert(sizeof(typename ContType::value_type) == 1, "LoadFile2 can only load into a vector of bytes");
-    FILE *f = NULL;
     bool good = false;
     long len;
     size_t num_bytes, num_read;
 
-    f = fopenUTF8(path.c_str(), mode);
+#ifdef B2_LIBRETRO_CORE
+    retro_vfs_file *f = retro_vfs_fopen(path, mode);
+#else
+    FILE *f = fopenUTF8(path.c_str(), mode);
+#endif
     if (!f) {
         if (errno == ENOENT && (flags & LoadFlag_MightNotExist)) {
             // ignore this error.
@@ -69,12 +76,21 @@ static bool LoadFile2(ContType *data,
         goto done;
     }
 
+#ifdef B2_LIBRETRO_CORE
+    if (retro_vfs_fseek(f, 0, SEEK_END) != 0) {
+        AddError(logs, path, "load", "fseek (1) failed", errno);
+        goto done;
+    }
+
+    len = (long)retro_vfs_ftell(f);
+#else
     if (fseek(f, 0, SEEK_END) == -1) {
         AddError(logs, path, "load", "fseek (1) failed", errno);
         goto done;
     }
 
     len = ftell(f);
+#endif
     if (len < 0) {
         AddError(logs, path, "load", "ftell failed", errno);
         goto done;
@@ -87,19 +103,34 @@ static bool LoadFile2(ContType *data,
     }
 #endif
 
+#ifdef B2_LIBRETRO_CORE
+    if (retro_vfs_fseek(f, 0, SEEK_SET) != 0) {
+        AddError(logs, path, "load", "fseek (2) failed", errno);
+        goto done;
+    }
+#else
     if (fseek(f, 0, SEEK_SET) == -1) {
         AddError(logs, path, "load", "fseek (2) failed", errno);
         goto done;
     }
+#endif
 
     num_bytes = (size_t)len;
     data->resize(num_bytes);
 
+#ifdef B2_LIBRETRO_CORE
+    num_read = retro_vfs_fread(data->data(), 1, num_bytes, f);
+    if (retro_vfs_ferror(f)) {
+        AddError(logs, path, "load", "read failed", errno);
+        goto done;
+    }
+#else
     num_read = fread(data->data(), 1, num_bytes, f);
     if (ferror(f)) {
         AddError(logs, path, "load", "read failed", errno);
         goto done;
     }
+#endif
 
     // Number of bytes read may be smaller if mode is rt.
     data->resize(num_read);
@@ -111,7 +142,11 @@ done:;
     }
 
     if (f) {
+#ifdef B2_LIBRETRO_CORE
+        retro_vfs_fclose(f);
+#else
         fclose(f);
+#endif
         f = NULL;
     }
 
@@ -122,18 +157,31 @@ done:;
 //////////////////////////////////////////////////////////////////////////
 
 static bool SaveFile2(const void *data, size_t data_size, const std::string &path, const LogSet *logs, const char *fopen_mode) {
+#ifdef B2_LIBRETRO_CORE
+    retro_vfs_file *f = retro_vfs_fopen(path, fopen_mode);
+#else
     FILE *f = fopenUTF8(path.c_str(), fopen_mode);
+#endif
     if (!f) {
         AddError(logs, path, "save", "fopen failed", errno);
         return false;
     }
 
+#ifdef B2_LIBRETRO_CORE
+    retro_vfs_fwrite(data, 1, data_size, f);
+    bool bad = retro_vfs_ferror(f);
+#else
     fwrite(data, 1, data_size, f);
 
     bool bad = !!ferror(f);
+#endif
     int e = errno;
 
+#ifdef B2_LIBRETRO_CORE
+    retro_vfs_fclose(f);
+#else
     fclose(f);
+#endif
     f = nullptr;
 
     if (bad) {

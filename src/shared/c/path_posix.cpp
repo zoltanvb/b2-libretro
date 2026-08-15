@@ -8,6 +8,10 @@
 #include <dirent.h>
 #include <unistd.h>
 
+#ifdef B2_LIBRETRO_CORE
+#include "../../libretro/vfs.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
@@ -15,6 +19,13 @@ bool PathGlob(const std::string &folder,
               std::function<void(const std::string &path,
                                  bool is_folder)>
                   fun) {
+#ifdef B2_LIBRETRO_CORE
+    if (retro_vfs_glob(folder, fun)) {
+        return true;
+    }
+    // no VFS from the frontend - fall through
+#endif
+
     DIR *d = opendir(folder.c_str());
     if (!d) {
         return -1;
@@ -39,6 +50,12 @@ bool PathGlob(const std::string &folder,
 //////////////////////////////////////////////////////////////////////////
 
 bool PathIsFileOnDisk(const std::string &path, uint64_t *file_size, bool *can_write) {
+#ifdef B2_LIBRETRO_CORE
+    if (is_retro_vfs_available()) {
+        return retro_vfs_stat(path, file_size, can_write);
+    }
+#endif
+
     struct stat st;
     if (stat(path.c_str(), &st) == -1) {
         return false;
@@ -80,6 +97,18 @@ bool PathIsFolderOnDisk(const std::string &path) {
 //////////////////////////////////////////////////////////////////////////
 
 bool PathCreateFolder(const std::string &path) {
+#ifdef B2_LIBRETRO_CORE
+    if (is_retro_vfs_available()) {
+        bool ok = false;
+        for (size_t i = 0; i < path.size(); ++i) {
+            if (path[i] == '/') {
+                ok = retro_vfs_mkdir(path.substr(0, i + 1));
+            }
+        }
+        return ok;
+    }
+#endif
+
     int last_rc = -1;
     int last_errno = 0;
 
