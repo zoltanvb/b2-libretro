@@ -27,8 +27,8 @@ include:
     file: '/linux-x64.yml'
 
   # Linux 32-bit
-  #- project: 'libretro-infrastructure/ci-templates'
-  #  file: '/linux-i686.yml'
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/linux-i686.yml'
 
   # Linux 64-bit (ARM)
   - project: 'libretro-infrastructure/ci-templates'
@@ -131,10 +131,10 @@ libretro-build-linux-x64:
     - .core-defs
 
 # Linux 32-bit
-#libretro-build-linux-i686:
-#  extends:
-#    - .libretro-linux-i686-make-default
-#    - .core-defs
+libretro-build-linux-i686:
+  extends:
+    - .libretro-linux-i686-make-default
+    - .core-defs
 
 # Linux 64-bit (ARM)
 libretro-build-linux-aarch64:
@@ -174,10 +174,10 @@ android-x86_64:
     - .core-defs
     
 # Android 32-bit x86
-#android-x86:
-#  extends:
-#    - .libretro-android-jni-x86
-#    - .core-defs
+android-x86:
+  extends:
+    - .libretro-android-jni-x86
+    - .core-defs
 
 # iOS
 libretro-build-ios-arm64:
