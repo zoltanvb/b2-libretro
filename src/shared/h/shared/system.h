@@ -38,6 +38,10 @@ extern "C" void __nop(void);
 #define SYSTEM_LINUX 1
 #define SYSTEM_POSIX 1
 
+#elif defined HAVE_LIBNX
+
+#define SYSTEM_POSIX 1
+
 #else
 
 #error Unknown platform.
